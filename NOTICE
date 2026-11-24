@@ -1,0 +1,13 @@
+InnertubeXPANDED
+Copyright (C) 2026 Metrolist contributors and 956tris
+
+This project is an expanded fork of InnerTubeX v0.11.7
+(https://github.com/MetrolistGroup/innertubex) by the Metrolist contributors,
+licensed under the GNU General Public License, version 3 (GPL-3.0).
+
+Additions in InnertubeXPANDED:
+- Normal YouTube (www.youtube.com) Web API models, response parsers, and client
+  helpers (`com.metrolist.innertubex.youtube`) for feeds, search, channels,
+  playlists, watch-next/chapters, library/subscriptions/history, URL resolution,
+  and timedtext JSON3 captions.
+- 4K (2160p) and SABR video verification and tests.

@@ -120,12 +120,12 @@ mavenPublishing {
     // JitPack drops classifiers from Gradle source-variant URLs; attach the platform JARs separately.
     configure(KotlinMultiplatform(sourcesJar = SourcesJar.None()))
     pom {
-        name.set("InnerTubeX")
+        name.set("InnertubeXPANDED")
         description.set(
-            "Extended Android and JVM Kotlin Multiplatform client for YouTube's InnerTube APIs, SABR audio/video, and player cipher deobfuscation.",
+            "Expanded fork of MetrolistGroup/innertubex (GPL-3.0) with normal YouTube Web API parsers, 4K/SABR support, and player cipher deobfuscation.",
         )
         inceptionYear.set("2026")
-        url.set("https://github.com/MetrolistGroup/innertubex")
+        url.set("https://github.com/956tris/InnertubeXPANDED")
 
         licenses {
             license {
@@ -141,17 +141,22 @@ mavenPublishing {
                 name.set("Metrolist contributors")
                 url.set("https://github.com/MetrolistGroup")
             }
+            developer {
+                id.set("956tris")
+                name.set("956tris")
+                url.set("https://github.com/956tris")
+            }
         }
 
         scm {
-            url.set("https://github.com/MetrolistGroup/innertubex")
-            connection.set("scm:git:git://github.com/MetrolistGroup/innertubex.git")
-            developerConnection.set("scm:git:ssh://git@github.com/MetrolistGroup/innertubex.git")
+            url.set("https://github.com/956tris/InnertubeXPANDED")
+            connection.set("scm:git:git://github.com/956tris/InnertubeXPANDED.git")
+            developerConnection.set("scm:git:ssh://git@github.com/956tris/InnertubeXPANDED.git")
         }
 
         issueManagement {
             system.set("GitHub")
-            url.set("https://github.com/MetrolistGroup/innertubex/issues")
+            url.set("https://github.com/956tris/InnertubeXPANDED/issues")
         }
     }
 }

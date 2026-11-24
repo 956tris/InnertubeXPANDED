@@ -1,3 +1,27 @@
+# InnertubeXPANDED
+
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+
+**InnertubeXPANDED** is an expanded fork of [MetrolistGroup/innertubex](https://github.com/MetrolistGroup/innertubex) (`v0.11.7`, GPL-3.0) by the Metrolist contributors.
+
+In addition to all upstream InnerTubeX features (SABR/UMP audio and video streaming, 4K `2160p` adaptive video selection, QuackJS player cipher deobfuscation, isolated authenticated sessions, and YouTube Music browse/search/player), InnertubeXPANDED adds:
+
+- **Normal YouTube (`www.youtube.com`) Web API models & parsers** (`com.metrolist.innertubex.youtube`):
+  - Home feed (`FEwhat_to_watch`) & shelf/continuation parsing (`richGridRenderer`, `richSectionRenderer`, `shelfRenderer`, `lockupViewModel`, `shortsLockupViewModel`, `videoRenderer`)
+  - Search with `YouTubeSearchFilter` (`ALL`, `VIDEO`, `CHANNEL`, `PLAYLIST`, `LIVE`, `FOUR_K`)
+  - Watch Next (`next`), related videos, playlist queues, and video chapters (`macroMarkersListItemRenderer`)
+  - Channel pages (`UC...`, `c4TabbedHeaderRenderer`, `pageHeaderRenderer`) and `@handle` / URL resolution (`navigation/resolve_url`)
+  - Playlist pages (`VL...`, `PL...`, `LL`, `WL`) and signed-in Library feeds (`VLLL`, `VLWL`, `FEsubscriptions`, `FEhistory`, `FEplaylist_aggregation`)
+  - Account menu parsing (`activeAccountHeaderRenderer`, `googleAccountHeaderRenderer`) and timedtext `json3` caption parsing (`YouTubeCaptionTrack` / `YouTubeCaptionLine`)
+
+## Credits
+
+All core InnerTube client, SABR/UMP streaming, format selection, and QuackJS cipher extraction code is from [InnerTubeX](https://github.com/MetrolistGroup/innertubex) by the [Metrolist](https://github.com/MetrolistGroup/Metrolist) contributors, licensed under **GNU GPL v3.0**.
+
+---
+
+_Original InnerTubeX README follows:_
+
 # InnerTubeX
 
 [![CI](https://github.com/MetrolistGroup/innertubex/actions/workflows/ci.yml/badge.svg)](https://github.com/MetrolistGroup/innertubex/actions/workflows/ci.yml)

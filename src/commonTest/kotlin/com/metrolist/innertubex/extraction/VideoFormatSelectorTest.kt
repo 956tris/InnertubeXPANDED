@@ -138,4 +138,21 @@ class VideoFormatSelectorTest {
 
         assertEquals(248, selectBestVideoFormat(formats)?.itag)
     }
+
+    @Test
+    fun selects4k2160pFormatByDefault() {
+        val with4k =
+            formats +
+                Format(
+                    itag = 313,
+                    mimeType = "video/webm; codecs=\"vp9\"",
+                    bitrate = 15_000_000,
+                    width = 3840,
+                    height = 2160,
+                    url = "https://2160",
+                )
+        assertEquals(313, selectBestVideoFormat(with4k)?.itag)
+        assertEquals(313, selectBestVideoFormat(with4k, maxHeight = 2160)?.itag)
+        assertEquals(137, selectBestVideoFormat(with4k, maxHeight = 1440)?.itag)
+    }
 }

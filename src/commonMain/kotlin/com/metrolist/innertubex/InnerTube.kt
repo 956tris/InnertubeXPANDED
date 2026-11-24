@@ -18,6 +18,7 @@ import com.metrolist.innertubex.models.body.LikeBody
 import com.metrolist.innertubex.models.body.NextBody
 import com.metrolist.innertubex.models.body.PlayerBody
 import com.metrolist.innertubex.models.body.PlaylistDeleteBody
+import com.metrolist.innertubex.models.body.ResolveUrlBody
 import com.metrolist.innertubex.models.body.SearchBody
 import com.metrolist.innertubex.models.body.SubscribeBody
 import com.metrolist.innertubex.models.response.ImageUploadResponse
@@ -684,6 +685,31 @@ class InnerTube(
                         browseId = browseId,
                         params = params,
                         continuation = continuation,
+                    ),
+                )
+            }
+        }
+    }
+
+    suspend fun resolveUrl(
+        client: YouTubeClient,
+        url: String,
+    ): HttpResponse {
+        val requestSession = sessionSnapshot()
+        val visitorDataForRequest = requestSession.visitorData.takeUnless { requestSession.regionOverrideActive }
+        return executeRequest(operation = "resolveUrl") {
+            postClient.postBounded("navigation/resolve_url", keepErrorBody = false) {
+                ytClient(
+                    client,
+                    requestSession,
+                    setLogin = false,
+                    visitorData = visitorDataForRequest,
+                    includeAccountCookies = false,
+                )
+                setBody(
+                    ResolveUrlBody(
+                        context = client.toContext(requestSession.locale, visitorDataForRequest, null),
+                        url = url,
                     ),
                 )
             }
