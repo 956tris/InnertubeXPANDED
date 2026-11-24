@@ -4982,9 +4982,13 @@ public final class com/metrolist/innertubex/youtube/YouTubeVideo {
 }
 
 public final class com/metrolist/innertubex/youtube/YouTubeWebClient {
+	public static final field INITIAL_PUBLIC_FEED_COUNT I
+	public static final field PUBLIC_FEED_CONTINUATION_PREFIX Ljava/lang/String;
 	public fun <init> (Lcom/metrolist/innertubex/InnerTube;Lkotlin/jvm/functions/Function1;)V
 	public synthetic fun <init> (Lcom/metrolist/innertubex/InnerTube;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun accountInfo (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun browseFeed (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun browseFeed$default (Lcom/metrolist/innertubex/youtube/YouTubeWebClient;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun captionTracks (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun channel (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun channel$default (Lcom/metrolist/innertubex/youtube/YouTubeWebClient;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;

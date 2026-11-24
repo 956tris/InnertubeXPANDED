@@ -12,12 +12,15 @@ import kotlinx.serialization.json.longOrNull
 object YouTubeWebParser {
     private val videoIdRegex = Regex("[A-Za-z0-9_-]{11}")
     private const val MAX_ITEMS = 500
-    private const val MAX_TRAVERSAL_NODES = 20_000
+    private const val MAX_TRAVERSAL_NODES = 100_000
+    private val SKIPPED_KEYS =
+        setOf("topbar", "responseContext", "frameworkUpdates", "trackingParams", "loggingDirectives", "menu", "commandMetadata")
 
     fun parseFeedPage(root: JsonObject): YouTubeFeedPage {
         val shelves = mutableListOf<YouTubeShelf>()
         val items = mutableListOf<YouTubeFeedItem>()
         val seenItemKeys = HashSet<String>()
+        val roots = contentRoots(root)
 
         fun addItem(
             item: YouTubeFeedItem,
@@ -34,15 +37,19 @@ object YouTubeWebParser {
             }
         }
 
-        for (candidate in extractItems(root)) {
-            addItem(candidate, items)
+        for (contentRoot in roots) {
+            for (candidate in extractItems(contentRoot)) {
+                addItem(candidate, items)
+            }
         }
 
         val shelfObjects =
-            findObjectsByKey(
-                root,
-                setOf("shelfRenderer", "richSectionRenderer", "reelShelfRenderer"),
-            )
+            roots.flatMap { contentRoot ->
+                findObjectsByKey(
+                    contentRoot,
+                    setOf("shelfRenderer", "richSectionRenderer", "reelShelfRenderer"),
+                )
+            }
         for (shelf in shelfObjects) {
             val innerContent = shelf.obj("content")
             if (innerContent?.containsKey("reelShelfRenderer") == true || innerContent?.containsKey("shelfRenderer") == true) {
@@ -54,6 +61,7 @@ object YouTubeWebParser {
             val title =
                 text(shelf["title"])
                     ?: text(shelf.obj("header")?.obj("title"))
+                    ?: text(innerContent?.obj("richShelfRenderer")?.get("title"))
                     ?: text(innerContent?.obj("shelfRenderer")?.get("title"))
                     ?: text(innerContent?.obj("reelShelfRenderer")?.get("title"))
                     ?: if (isShorts) "Shorts" else "Featured"
@@ -401,8 +409,8 @@ object YouTubeWebParser {
                         results += YouTubeFeedItem(playlist = it)
                         continue
                     }
-                    for (value in current.values) {
-                        if (value is JsonObject || value is JsonArray) {
+                    for ((key, value) in current) {
+                        if (key !in SKIPPED_KEYS && (value is JsonObject || value is JsonArray)) {
                             queue.add(value)
                         }
                     }
@@ -595,12 +603,11 @@ object YouTubeWebParser {
 
         val id = watchVideoId ?: return null
         val durationText =
-            findObjectsByKey(obj, setOf("thumbnailOverlayBadgeViewModel"))
+            findObjectsByKey(obj.obj("contentImage") ?: obj, setOf("thumbnailBadgeViewModel"))
                 .firstNotNullOfOrNull { badge ->
-                    badge
-                        .array("thumbnailBadges")
-                        ?.firstOrNull()
-                        ?.let { (it as? JsonObject)?.obj("thumbnailBadgeViewModel")?.string("text") }
+                    badge.string("text")?.takeIf { text ->
+                        text.equals("LIVE", ignoreCase = true) || parseDurationSeconds(text) != null
+                    }
                 }
         val channelId =
             findObjectsByKey(meta, setOf("browseEndpoint"))
@@ -663,6 +670,17 @@ object YouTubeWebParser {
         }
         return findObjectsByKey(root, setOf("nextContinuationData"))
             .firstNotNullOfOrNull { it.string("continuation")?.takeIf(String::isNotBlank) }
+    }
+
+    private fun contentRoots(root: JsonObject): List<JsonElement> {
+        val selected =
+            listOfNotNull(
+                root["contents"],
+                root["onResponseReceivedActions"],
+                root["onResponseReceivedEndpoints"],
+                root["continuationContents"],
+            )
+        return selected.ifEmpty { listOf(root) }
     }
 
     private fun findMetadataRowsText(viewModel: JsonObject?): List<String> {
@@ -739,7 +757,7 @@ object YouTubeWebParser {
                         if (key in keys && value is JsonObject) {
                             out += value
                         }
-                        if (value is JsonObject || value is JsonArray) {
+                        if (key !in SKIPPED_KEYS && (value is JsonObject || value is JsonArray)) {
                             queue.add(value)
                         }
                     }
